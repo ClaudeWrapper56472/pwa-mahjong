@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover so the felt reaches under the notch; the safe-area insets
+     in the stylesheet keep the controls out from under it. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14332c">
+<meta name="description" content="Mahjong solitaire. Match free tiles in pairs and clear the board.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jade Match">
+<title>Jade Match</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main id="app">
+
+	<section id="menu-screen" class="screen menu">
+
+		<div class="menu-scroll">
+			<svg class="crest" viewBox="0 0 132 96" aria-hidden="true">
+				<g class="crest-tile">
+					<rect x="6" y="18" width="46" height="62" rx="7"/>
+					<circle cx="29" cy="49" r="15" class="crest-ring"/>
+					<circle cx="29" cy="49" r="6" class="crest-core"/>
+				</g>
+				<g class="crest-tile">
+					<rect x="43" y="10" width="46" height="62" rx="7"/>
+					<path d="M66 24 v34 M56 36 h20 M56 48 h20" class="crest-mark"/>
+				</g>
+				<g class="crest-tile">
+					<rect x="80" y="18" width="46" height="62" rx="7"/>
+					<path d="M103 30 v38 M94 42 h18 M94 54 h18" class="crest-mark"/>
+					<path d="M103 30 l-8 -8 M103 30 l8 -8" class="crest-mark"/>
+				</g>
+			</svg>
+
+			<h1>Jade Match</h1>
+			<p class="subtitle">Match free tiles in pairs. Clear the board.</p>
+
+			<button id="continue-button" type="button" class="primary" hidden>Continue</button>
+
+			<div id="layout-list" class="layout-list"></div>
+
+			<div class="menu-options">
+				<label class="toggle">
+					<input id="match-toggle" type="checkbox">
+					<span>Highlight tiles that match the one I picked</span>
+				</label>
+				<button id="rules-button" type="button" class="quiet">How to play</button>
+			</div>
+
+			<div id="menu-summary" class="summary"></div>
+		</div>
+
+	</section>
+
+	<section id="game-screen" class="screen game" hidden>
+
+		<header class="header-row">
+			<button id="back-button" type="button" class="quiet">Boards</button>
+			<span id="board-name" class="board-name">Board</span>
+			<span id="left-label" class="counter">0 / 0</span>
+			<span id="time-label" class="counter">0:00</span>
+		</header>
+
+		<!-- The board is transformed as one element inside the viewport, so pinch
+		     and drag never relayout the tiles. -->
+		<div id="board-viewport" class="board-viewport">
+			<div id="board" class="board"></div>
+		</div>
+
+		<div class="bottom-bar">
+			<!-- The zoom controls share the status band rather than floating over
+			     the board, where they would sit on top of the corner tiles. -->
+			<div class="status-row">
+				<p id="status-label" class="status" role="status" aria-live="polite"></p>
+				<div class="zoom-controls">
+					<button id="zoom-out-button" type="button" class="round" aria-label="Zoom out">&minus;</button>
+					<button id="fit-button" type="button" class="round" aria-label="Fit the board on screen">&#8862;</button>
+					<button id="zoom-in-button" type="button" class="round" aria-label="Zoom in">&plus;</button>
+				</div>
+			</div>
+			<div class="toolbar">
+				<button id="undo-button" type="button" disabled>Undo</button>
+				<button id="hint-button" type="button">Hint</button>
+				<button id="shuffle-button" type="button">Shuffle</button>
+			</div>
+		</div>
+
+		<div id="result-panel" class="overlay" hidden>
+			<div class="card">
+				<h2 id="result-title">Board cleared</h2>
+				<p id="result-detail"></p>
+				<button id="again-button" type="button" class="primary">Next board</button>
+				<button id="result-menu-button" type="button">Boards</button>
+			</div>
+		</div>
+
+	</section>
+
+	<div id="rules-panel" class="overlay" hidden>
+		<div class="card rules">
+			<h2>How to play</h2>
+			<p>Tap two tiles with the same face to take them off the board. Clear
+				every tile to win.</p>
+			<p>A tile can only be taken when <strong>nothing rests on top of it</strong>
+				and <strong>its left or right edge is clear</strong>. Tiles you cannot
+				take are dimmed.</p>
+			<p>Flowers match any other flower, and seasons match any other season.
+				They carry a coloured band along the bottom edge: green for flowers,
+				blue for seasons.</p>
+			<p>Double-tap a spot to zoom in on it, and double-tap again to see the
+				whole board. Pinch or use the buttons to zoom, and drag to move around.
+				<strong>Hint</strong> points at a pair that keeps the board
+				winnable, <strong>Shuffle</strong> re-deals what is left, and
+				<strong>Undo</strong> takes a pair back.</p>
+			<button id="rules-close" type="button" class="primary">Got it</button>
+		</div>
+	</div>
+
+</main>
+
+<script type="module" src="js/ui/main.js"></script>
+</body>
+</html>
