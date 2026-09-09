@@ -12,8 +12,9 @@ import { Emitter } from "../util/emitter.js";
  * elementFromPoint, which reads viewport coordinates and so needs no arithmetic
  * to undo that transform.
  *
- * One finger taps a tile or drags the board; two fingers pinch. A double tap
- * zooms in on that spot, and a double tap while zoomed fits the board again.
+ * One finger taps a tile or drags the board; two fingers pinch. A double tap on
+ * the felt zooms in on that spot, and a double tap while zoomed fits the board
+ * again.
  *
  * Emits: tileTapped(index), zoomChanged(zoom, fit)
  */
@@ -31,6 +32,9 @@ export class BoardView extends Emitter {
 	/** Two taps this close in time and space are a double tap. */
 	static DOUBLE_TAP_MS = 320;
 	static DOUBLE_TAP_PX = 32;
+
+	/** Multiple of the fitting scale above which the board counts as zoomed in. */
+	static ZOOMED_IN = 1.25;
 
 	/** Tile width a double tap zooms to, in screen pixels. */
 	static TAP_TILE_PX = 46;
@@ -300,12 +304,14 @@ export class BoardView extends Emitter {
 	}
 
 	/**
-	 * The second tap of a double tap zooms rather than selecting. The first tap
-	 * has already selected its tile, so nothing the player meant is lost.
+	 * A double tap zooms rather than selecting, and both taps have to land on the
+	 * same thing to count as one.
 	 *
-	 * Both taps must land on the same tile, or both on the felt. Zoomed out, two
-	 * neighbouring tiles sit closer together than DOUBLE_TAP_PX, and picking a
-	 * pair is not a request to zoom.
+	 * Only the felt zooms in. Fitted on screen a tile is around 20px wide, so two
+	 * taps meant for neighbouring tiles can both land on the same one, and a zoom
+	 * there would swallow the pair the player was picking. Zoomed in the tiles are
+	 * large enough to trust, so a double tap on one fits the board again — the
+	 * way back out stays under the finger that zoomed in.
 	 */
 	_tap(event) {
 		const now = performance.now();
@@ -313,7 +319,8 @@ export class BoardView extends Emitter {
 		const again = last !== null
 			&& last.index === this._tapIndex
 			&& now - last.time < BoardView.DOUBLE_TAP_MS
-			&& Math.hypot(event.clientX - last.x, event.clientY - last.y) < BoardView.DOUBLE_TAP_PX;
+			&& Math.hypot(event.clientX - last.x, event.clientY - last.y) < BoardView.DOUBLE_TAP_PX
+			&& (this._tapIndex < 0 || this._zoom > this._fitZoom * BoardView.ZOOMED_IN);
 		if (again) {
 			this._lastTap = null;
 			const rect = this.viewport.getBoundingClientRect();
@@ -326,7 +333,7 @@ export class BoardView extends Emitter {
 
 	_toggleZoomAt(x, y) {
 		if (this._layout === null) return;
-		if (this._zoom > this._fitZoom * 1.25) {
+		if (this._zoom > this._fitZoom * BoardView.ZOOMED_IN) {
 			this._fit(false);
 			return;
 		}

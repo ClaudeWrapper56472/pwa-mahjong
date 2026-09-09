@@ -50,11 +50,27 @@ body {
 	font-size: clamp(0.95rem, 3.3vw, 1.05rem);
 	line-height: 1.35;
 	overscroll-behavior: none;
-	/* Panning and nothing else: neither a pinch nor a double tap zooms the menu
-	   or the chrome around the board. The board sets touch-action: none and runs
-	   its own zoom; the menu and the cards still scroll. */
 	touch-action: pan-y;
 	-webkit-text-size-adjust: 100%;
+}
+
+/*
+ * The browser never zooms the app: scrolling is the only touch behaviour it is
+ * allowed, so neither a pinch nor a double tap grows the menu or the chrome
+ * around the board. Every element says so, not just body, because WebKit reads
+ * touch-action from the element under the finger.
+ *
+ * The board allows nothing at all. A drag there pans it and a pinch zooms it,
+ * both from the pointer events, and neither scrolls the page.
+ */
+#app,
+#app * {
+	touch-action: pan-y;
+}
+
+#app .board-viewport,
+#app .board-viewport * {
+	touch-action: none;
 }
 
 #app {
@@ -313,9 +329,6 @@ button:disabled {
 		radial-gradient(90% 70% at 50% 40%, #1d4b40, transparent 70%),
 		var(--felt-deep);
 	overflow: hidden;
-	/* The gesture owns the pointer: a drag here pans the board, it does not
-	   scroll the page. */
-	touch-action: none;
 	-webkit-user-select: none;
 	user-select: none;
 	-webkit-touch-callout: none;

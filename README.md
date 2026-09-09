@@ -26,8 +26,9 @@ turn that on if you want the help.
 are, so it can dig you out of a dead board. **Undo** takes a pair back, as far
 as the start of the board.
 
-Double-tap a spot to zoom in on it and double-tap again to fit the whole board;
-pinch or use the zoom buttons, and drag to move around.
+Double-tap the felt beside the tiles to zoom in on that spot and double-tap
+again to fit the whole board; pinch or use the zoom buttons, and drag to move
+around.
 
 **Keyboard:** arrows step through the free tiles, `Enter` takes one, `H` hints,
 `S` shuffles, `F` fits the board, `+`/`-` zoom, `Cmd`/`Ctrl`+`Z` undoes, `Esc`
