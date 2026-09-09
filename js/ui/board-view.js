@@ -302,11 +302,16 @@ export class BoardView extends Emitter {
 	/**
 	 * The second tap of a double tap zooms rather than selecting. The first tap
 	 * has already selected its tile, so nothing the player meant is lost.
+	 *
+	 * Both taps must land on the same tile, or both on the felt. Zoomed out, two
+	 * neighbouring tiles sit closer together than DOUBLE_TAP_PX, and picking a
+	 * pair is not a request to zoom.
 	 */
 	_tap(event) {
 		const now = performance.now();
 		const last = this._lastTap;
 		const again = last !== null
+			&& last.index === this._tapIndex
 			&& now - last.time < BoardView.DOUBLE_TAP_MS
 			&& Math.hypot(event.clientX - last.x, event.clientY - last.y) < BoardView.DOUBLE_TAP_PX;
 		if (again) {
@@ -315,7 +320,7 @@ export class BoardView extends Emitter {
 			this._toggleZoomAt(event.clientX - rect.left, event.clientY - rect.top);
 			return;
 		}
-		this._lastTap = { time: now, x: event.clientX, y: event.clientY };
+		this._lastTap = { time: now, x: event.clientX, y: event.clientY, index: this._tapIndex };
 		if (this._tapIndex >= 0) this.emit("tileTapped", this._tapIndex);
 	}
 
