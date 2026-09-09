@@ -3,6 +3,7 @@ import { SaveManager } from "../save-manager.js";
 import { GameState } from "../game-state.js";
 import { MenuScreen } from "./menu-screen.js";
 import { GameScreen } from "./game-screen.js";
+import { lockPageZoom } from "./page-zoom.js";
 
 /**
  * Boot and screen router.
@@ -11,6 +12,8 @@ import { GameScreen } from "./game-screen.js";
  * them and they are cheap, so the board does not rebuild its tiles every time
  * the player glances at the menu.
  */
+
+lockPageZoom();
 
 const settings = new Settings();
 settings.load();

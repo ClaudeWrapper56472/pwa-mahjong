@@ -42,6 +42,7 @@ const ASSETS = [
 	"js/ui/game-screen.js",
 	"js/ui/main.js",
 	"js/ui/menu-screen.js",
+	"js/ui/page-zoom.js",
 	"js/util/emitter.js",
 	"js/util/rng.js",
 ];

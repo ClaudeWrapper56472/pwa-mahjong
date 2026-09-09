@@ -88,7 +88,8 @@ js/
   settings.js            Preferences
   util/emitter.js        Named events
   util/rng.js            Seeded PCG32
-  ui/                    board-view.js, menu-screen.js, game-screen.js, main.js
+  ui/                    board-view.js, menu-screen.js, game-screen.js,
+                         page-zoom.js, main.js
 
 icons/                   App icons, drawn by tools/make-icons.mjs
 tools/make-icons.mjs     PNG encoder and rasterizer, no dependencies

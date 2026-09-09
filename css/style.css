@@ -50,9 +50,10 @@ body {
 	font-size: clamp(0.95rem, 3.3vw, 1.05rem);
 	line-height: 1.35;
 	overscroll-behavior: none;
-	/* No browser double-tap zoom on the menu or toolbar; the board sets its own
-	   touch-action and handles the gesture itself. */
-	touch-action: manipulation;
+	/* Panning and nothing else: neither a pinch nor a double tap zooms the menu
+	   or the chrome around the board. The board sets touch-action: none and runs
+	   its own zoom; the menu and the cards still scroll. */
+	touch-action: pan-y;
 	-webkit-text-size-adjust: 100%;
 }
 
